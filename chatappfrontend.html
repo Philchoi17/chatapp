@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chat Room</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+<style>
+    html, body, div{margin:0px;padding:0px}
+    body
+    {
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+    div
+    {
+        display:inline-block;
+    }
+    .chatRoom 
+    {
+        background-color:white;
+        width:80%;
+        height:500px;
+        overflow:scroll;
+        border-top:10px ridge darkgrey;
+        border-bottom:10px ridge darkgrey;
+        border-radius:50px;
+
+    }
+    #userArea 
+    {
+        background-color:lightgrey;
+        width:100%;
+        height:100px;
+        border:1px solid black;
+        margin-top:-5px;
+    }
+    #textInput 
+    {
+        position: relative;
+        width: 750px;
+        height: 75px;
+        font-size: 20px;
+        top: 10px;
+        left: 25px;
+        padding-left: 20px;
+        border:none;
+    }
+    #userID
+    {
+        position: relative;
+        width: 200px;
+        height: 50px;
+        font-size: 20px;
+        top: 0px;
+        left: 25px;
+        border-radius: 5%;
+        border: solid;
+        text-align: center;
+    }
+    #submitButton
+    {
+        width: 50px;
+        height: 50px;
+        background-color: grey;
+        position: relative;
+        left: 30px;
+        top: 10px;
+        border-radius:50%;
+        border: 1px solid black;
+        font-size:24px;
+    }
+    #submitButton:hover 
+    {
+        cursor:pointer;
+    }
+    #userName
+    {
+        font-weight:bold;
+        font-size:18px;
+    }
+    #chatStyle
+    {
+        font-size:16px;
+        text-align:left;
+        color:grey;
+        font-style:oblique;
+    }
+    .chatStyleA
+    {
+        font-size:16px;
+        text-align:left;
+    }
+    .chatStyleB
+    {
+        font-size:16px;
+        text-align:left;
+    }
+    .chatStyleC
+    {
+        font-size:16px;
+        text-align:left;
+    }
+    #aChat 
+    {
+        background-color:white;
+        /* background-image:url("http://www.dotfoods.com/images/cloud_background.jpg"); */
+    }
+    h1
+    {
+        color:grey;
+        font-style:oblique;
+    }
+    #secretMessage
+    {
+        position: relative;
+        left: 25PX;
+        height: 20px;
+        margin: 0px 20px 0px;
+    }
+    .loggedInUser 
+    {
+        text-align:right;
+        margin-right:50px;
+    }
+    .userName 
+    {
+        font-weight:bold;
+    }
+    #loginArea 
+    {
+        width: 100%;
+        background-color: lightgrey;
+        /* background-image: url("http://deskbg.com/s3/wpp/0/83/ocean-clouds-desktop-background.jpg"); */
+        border-top:10px ridge darkgrey;
+    }
+    #userCollection
+    {
+        height: 500px;
+        width: 20%;
+        border-top: 10px ridge darkgrey;
+        border-bottom: 10px ridge darkgrey;
+        overflow: scroll;
+        color: white;
+        text-align: center;
+        margin-left: -5px;
+        /* background-image: url(https://pm1.narvii.com/6380/c064ae7…_hq.jpg); */
+        border-radius: 50px;
+        background-color: grey;
+
+    }
+    .buddyListItems:hover
+    {
+        background-color:blue;
+    }
+    #publicMessage
+    {
+        width: 75px;
+        height: 60px;
+        font-size: 2em;
+        margin-top: 10px;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        border-radius: 40px;
+    }
+    #enterName
+    {
+        position: relative;
+        left: 30px;
+        width: 55px;
+        height: 30px;
+        /* top: -10px; */
+        border-radius: 5px;
+        font-weight: bolder;
+        text-align: center;
+        cursor:pointer;
+        font-size:20px
+    }
+    #userLoginForm label
+    {
+        margin-left:10px;
+    }
+    #title 
+    {
+        width: 100%;
+        height: 100px;
+        text-align: center;
+        line-height: 75px;
+        font-size: 3em;
+        text-decoration: underline;
+        background-color:beige;    
+        /* background-image:url("https://i.ytimg.com/vi/2VGcbE3bYvA/maxresdefault.jpg"); */
+        background-position: 0px -450px;
+        background-size: 100%;
+    }
+
+    .chatLine 
+    {
+        margin-left: 10px;
+        background-color: skyblue;
+        margin-bottom: -10px;
+        border-radius: 10px;
+    }
+    #currentUser
+    {
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-size:14px;
+    }
+    #timeOf
+    {
+        font-size:12px;
+    }
+    #DM
+    {
+        color:red;
+    }
+</style>
+<body>
+    <div id="title">Chatroom</div>
+    <div id="loginArea">
+        <form id="userLoginForm">
+            <label for="userID">LOG-IN:</label>
+            <input type="text" name="who" id="userID">
+            <button type="button" id="enterName" ><i class="fa fa-exchange" aria-hidden="true"></i></button>
+        </form>
+    </div>
+
+    <div class="chatRoom" id="aChat"></div>
+    <div id="userCollection">
+        <button type = "button" id="publicMessage">
+            <i class="fa fa-connectdevelop" aria-hidden="true"></i>
+        </button>
+        <h1>
+                <i class="fa fa-user-secret" aria-hidden="true"></i>
+                Direct Message:
+        </h1>
+        <div id="buddyList"></div>
+    </div>
+        
+    <div id="userArea">
+            <form id="enterChat">
+                <input type="text" name="says" id="textInput" placeholder="text here..." autofocus="autofocus">
+                <!-- <input type="text" name="who" id="userID"> -->
+                <select name="privateMessage" id="secretMessage">
+                    <option value="public">DM</option>
+                </select>
+                <button type="button" id="submitButton">
+                    <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                </button>
+            </form>
+            
+        </div>
+        <p id = "currentUser"></p>
+        
+        <script>
+
+
+            var button = document.getElementById("submitButton");
+            var chatForm = document.getElementById("enterChat");
+            var chatInput = document.getElementById("textInput");
+            var user = document.getElementById("userID");
+            var userAChat = document.getElementById("aChat");
+            var submit = true;
+            var userACollect = document.getElementsByClassName("chatStyleA");
+            var userBCollect = document.getElementsByClassName("chatStyleB");
+            var userCCollect = document.getElementsByClassName("chatStyleC");
+            var directMess = document.getElementById("secretMessage");
+            var namesArr = document.getElementsByClassName("namesArr");
+            var chatLines = document.getElementsByClassName("chatLine");
+            var buddyList = document.getElementById("userCollection");
+            var buddyListItems = document.getElementsByClassName("buddyListItems");
+            var nameRefresh = document.getElementById("enterName");            
+            var lastMessage = 0;
+
+
+            function refreshChatWindow() 
+            {
+
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function()
+                {
+                    if (this.readyState === 4 && this.status === 200)
+                    {
+                        var output = xhttp.responseText;
+                        // console.log(output);
+                        var output = output.trim();
+                        
+                        var outputObj = JSON.parse(output);
+                        // console.log(outputObj);
+                        
+                        
+                        for(var i = 0; i < outputObj.length; i++)
+                        {                            
+                            
+                            var outputSingleObj = outputObj[i];
+                            
+                            // Create a new string that will be built up while processing the line.
+                            var outputStr = "";
+                            outputStr += "<p class='chatLine";
+
+                            // Only add the loggedInUser class if the message is from the logged in user.
+                            if (outputSingleObj.who === user.value)
+                            {
+                                outputStr += " loggedInUser";
+                            }
+
+                            outputStr += "'>" + "<span id = 'timeOf'>(" + outputSingleObj.time + ")</span>" + " <span class='userName'>" + outputSingleObj.who;
+
+                            // Only add the private message target if one exists in the incoming data.
+                            if (outputSingleObj.hasOwnProperty('privateMessage'))
+                            // if(outputSingleObj.privateMessage !== "public")
+                            {
+                                outputStr += " <span id='DM'>( DM To: " + outputSingleObj.privateMessage + ")</span>";
+                            }
+
+                            outputStr += "</span>: " + outputSingleObj.says;
+                            outputStr += "</p>";
+
+                            // Add the in row to the display.
+                            userAChat.innerHTML += outputStr;
+
+                            document.getElementById("currentUser").innerHTML = "Current User: [" + user.value + "] Today: " + outputSingleObj.date;
+
+                            // Check to see if the new message has a higher index than the current highest.
+                            if (parseInt(outputSingleObj.lineNum) > lastMessage) lastMessage = outputSingleObj.lineNum;
+
+                            // Check the buddy list.
+                            if(outputSingleObj.who !== user.value)
+                            {
+                                var inBuddyList = false;
+                                for (var iter = 0; iter < buddyListItems.length; iter++)
+                                {
+                                    thisItem = buddyListItems[iter];  // Paragraph element.
+                                    thisName = thisItem.innerHTML;  // The user's names are inside the paragraph tag.
+
+                                    if (thisName === outputSingleObj.who)
+                                    {
+                                        inBuddyList = true;
+                                        break;
+                                    }
+                                }
+                                if(inBuddyList === false)
+                                {
+                                    buddyList.innerHTML += "<p class='buddyListItems'>" + outputSingleObj.who + "</p>";
+                                    directMess.innerHTML += "<option value='" + outputSingleObj.who + "'>" + outputSingleObj.who + "</option>";
+                                    for(var x= 0; x < buddyListItems.length; x++)
+                                    {
+                                        buddyListItems[x].addEventListener("click", function()
+                                        {
+                                            // console.log("click");
+                                            directMess.value = this.innerHTML;
+                                        })
+                                        document.getElementById("publicMessage").addEventListener("click", function()
+                                        {
+                                            directMess.value = "public";
+
+                                        });
+                                    }
+                                }
+                            }
+                        }
+
+                        // After creating all the lines, force scroll to the bottom.
+                        userAChat.scrollTop = userAChat.scrollHeight;
+                    } // END check readyState
+                } // END function readyStateChange
+                
+                // var trying = xhttp.responseText;
+
+                var params = {user: user.value, lineNum: lastMessage};
+                // console.log(chatLines.length);
+                params = JSON.stringify(params);
+                xhttp.open("POST", "get_chat_messages.php");
+                xhttp.setRequestHeader("Content-type", "application/json");
+                xhttp.send(params);
+                
+            }
+            //when the page is first loaded
+            // refreshChatWindow("");
+
+            nameRefresh.addEventListener("click", function()
+            {
+                refreshChatWindow();
+            })
+    
+            button.addEventListener("click", function()
+            {
+                // console.log("CLICKED");
+                submit = true;
+    
+                if(user.value === "")
+                {
+                    submit = false;
+                }
+                if(directMess.value == "")
+                {
+                    submit = false;
+                }
+                if(chatInput.value === "")
+                {
+                    submit = false;
+                }
+    
+                if(submit === true)
+                {
+                    // console.log("SENDING MESSAGE TO SERVER");
+                    // document.getElementById("enterChat").submit();
+                    var httpReq = new XMLHttpRequest();
+                    // console.log(httpReq);
+                    httpReq.onreadystatechange = function()
+                    {
+                        if (this.readyState === 4 && this.status === 200)
+                        {
+                            var chatReq = httpReq.responseText.trim();
+                            // console.log(chatReq);
+                            var chatReqObj = JSON.parse(chatReq);
+                            
+                            if (chatReqObj.status !== "OK")
+                            {
+                                alert("Danger, Wil Robinson!");
+                            }                        
+                        }                     
+                    }
+                    httpReq.open("POST", "chatapp1.php");
+                    httpReq.setRequestHeader("Content-Type", "application/json");
+    
+                    var chatObj = 
+                    {
+                        says: document.getElementById("textInput").value,
+                        who: document.getElementById("userID").value,
+                        privateMessage: document.getElementById("secretMessage").value,
+                    };
+
+                    var chatInfoStr = JSON.stringify(chatObj);
+                    httpReq.send(chatInfoStr);
+                    // console.log(chatObj);
+                    chatInput.value = "";
+                }
+                refreshChatWindow();
+            });
+    
+            chatInput.addEventListener("keypress", function(event)
+            {
+                if(event.keyCode === 13)
+                {
+                    button.click();
+                    event.preventDefault();
+                }
+            });
+
+            document.getElementById("publicMessage").addEventListener("click", function()
+            {
+                directMess.value = "public";
+
+            });
+
+            // function reset() 
+            // {
+            //     setInterval(refreshChatWindow(), 1000);
+            // }
+
+            // reset();
+
+            setInterval (refreshChatWindow, 2500);
+            refreshChatWindow();
+
+
+
+        </script>
+    </body>
+    </html>
