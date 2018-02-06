@@ -12,6 +12,7 @@
     body
     {
         font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        background-color:lightgrey;
     }
     div
     {
@@ -25,7 +26,8 @@
         overflow:scroll;
         border-top:10px ridge darkgrey;
         border-bottom:10px ridge darkgrey;
-        border-radius:50px;
+        border-radius:25px;
+        padding-bottom:20px;
 
     }
     #userArea 
@@ -109,8 +111,10 @@
     }
     h1
     {
-        color:grey;
-        font-style:oblique;
+        color: whitesmoke;
+        font-style: oblique;
+        margin-bottom: -20px;
+        text-decoration: underline;
     }
     #secretMessage
     {
@@ -122,7 +126,8 @@
     .loggedInUser 
     {
         text-align:right;
-        margin-right:50px;
+        margin-right:10px;
+        float: right;
     }
     .userName 
     {
@@ -137,7 +142,7 @@
     }
     #userCollection
     {
-        height: 500px;
+        height: 85px;
         width: 20%;
         border-top: 10px ridge darkgrey;
         border-bottom: 10px ridge darkgrey;
@@ -148,8 +153,14 @@
         /* background-image: url(https://pm1.narvii.com/6380/c064ae7…_hq.jpg); */
         border-radius: 50px;
         background-color: grey;
-
+        transition: height 2s;
     }
+
+    #userCollection:hover
+    {
+        height:520px;
+    }
+
     .buddyListItems:hover
     {
         background-color:blue;
@@ -183,12 +194,12 @@
     #title 
     {
         width: 100%;
-        height: 100px;
+        height: 65px;
         text-align: center;
         line-height: 75px;
         font-size: 3em;
         text-decoration: underline;
-        background-color:beige;    
+        background-color:lightgrey;    
         /* background-image:url("https://i.ytimg.com/vi/2VGcbE3bYvA/maxresdefault.jpg"); */
         background-position: 0px -450px;
         background-size: 100%;
@@ -200,7 +211,18 @@
         background-color: skyblue;
         margin-bottom: -10px;
         border-radius: 10px;
+        display:inline-block;
+        height: 30px;
+        line-height: 25px;
+        transition: background-color 1s;
     }
+
+    .chatLine:load
+    {
+        background-color: white;
+    }
+
+    
     #currentUser
     {
         font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -270,7 +292,7 @@
             var buddyList = document.getElementById("userCollection");
             var buddyListItems = document.getElementsByClassName("buddyListItems");
             var nameRefresh = document.getElementById("enterName");            
-            var lastMessage = 0;
+            var lastMessageID;
 
 
             function refreshChatWindow() 
@@ -286,13 +308,15 @@
                         var output = output.trim();
                         
                         var outputObj = JSON.parse(output);
-                        // console.log(outputObj);
+                        // console.log(outputObj.length);
                         
                         
                         for(var i = 0; i < outputObj.length; i++)
                         {                            
                             
                             var outputSingleObj = outputObj[i];
+                            lastMessageID = outputSingleObj.id;
+                            // console.log(lastMessageID);
                             
                             // Create a new string that will be built up while processing the line.
                             var outputStr = "";
@@ -304,7 +328,7 @@
                                 outputStr += " loggedInUser";
                             }
 
-                            outputStr += "'>" + "<span id = 'timeOf'>(" + outputSingleObj.time + ")</span>" + " <span class='userName'>" + outputSingleObj.who;
+                            outputStr += "'>" + "<span id = 'timeOf'>(" + outputSingleObj.date_time + ")</span>" + " <span class='userName'>" + outputSingleObj.who;
 
                             // Only add the private message target if one exists in the incoming data.
                             if (outputSingleObj.hasOwnProperty('privateMessage'))
@@ -314,15 +338,15 @@
                             }
 
                             outputStr += "</span>: " + outputSingleObj.says;
-                            outputStr += "</p>";
+                            outputStr += "</p></br>";
 
                             // Add the in row to the display.
                             userAChat.innerHTML += outputStr;
 
-                            document.getElementById("currentUser").innerHTML = "Current User: [" + user.value + "] Today: " + outputSingleObj.date;
+                            document.getElementById("currentUser").innerHTML = "Current User: [" + user.value + "] Today: " + outputSingleObj.date_time;
 
                             // Check to see if the new message has a higher index than the current highest.
-                            if (parseInt(outputSingleObj.lineNum) > lastMessage) lastMessage = outputSingleObj.lineNum;
+                            // if (parseInt(outputSingleObj.lineNum) > lastMessage) lastMessage = outputSingleObj.lineNum;
 
                             // Check the buddy list.
                             if(outputSingleObj.who !== user.value)
@@ -355,6 +379,7 @@
                                             directMess.value = "public";
 
                                         });
+                                    
                                     }
                                 }
                             }
@@ -367,7 +392,7 @@
                 
                 // var trying = xhttp.responseText;
 
-                var params = {user: user.value, lineNum: lastMessage};
+                var params = {user: user.value, id: (chatLines.length)};
                 // console.log(chatLines.length);
                 params = JSON.stringify(params);
                 xhttp.open("POST", "get_chat_messages.php");
@@ -463,7 +488,14 @@
 
             setInterval (refreshChatWindow, 2500);
             refreshChatWindow();
-
+            
+            // for( var i = 0; i < chatLines.length; i++)
+            // {
+            //     chatLines[i].addEventListener("load", function()
+            //     {
+            //         document.getElementById.style.transition = "position"
+            //     });
+            // }
 
 
         </script>

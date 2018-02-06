@@ -1,12 +1,67 @@
 <?php 
 date_default_timezone_set("Asia/Seoul");
+$dateTime = date("Y-m-d h:i:sa");
+
 // Reading input from standard input. Stuff coming from the web.
 $chatUser1 = file_get_contents("php://input");
 $chatUser = json_decode($chatUser1);
 
 // Read from the database. Reading all the lines into a single array.
-$chatHistory = file_get_contents("chatcollect.csv");
-$chatHistory = trim($chatHistory);
+// $chatHistory = file_get_contents("chatcollect.csv");
+// $chatHistory = trim($chatHistory);
+
+// WHERE date_time > DATE_SUB(now(), INTERVAL 500 MINUTE)
+
+$db = new PDO('mysql:host=localhost;dbname=chatappdb;charset=utf8mb4', 'root', '');
+$sth = $db->prepare('
+    SELECT * FROM chatmessages 
+
+    ORDER BY date_time ASC
+');
+if ($sth->execute()) 
+{
+    $chatHistory = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+} 
+else 
+{ 
+    var_dump($sth);
+    // handle error
+
+}
+
+$jsonObjArr = [];
+
+
+
+// var_dump($chatHistory);
+for($i = $chatUser->id; $i < count($chatHistory); $i++)
+{
+    // $chatHistory = json_encode($chatHistory);
+
+    $thisObj = $chatHistory[$i];
+    if($chatHistory[$i]['who'] === $chatUser->user || $chatHistory[$i]['privateMessage'] === $chatUser->user || $chatHistory[$i]['privateMessage'] === "public")
+    {
+        $newObj = new stdClass();
+        $newObj->id = $thisObj['id'];
+        $newObj->says = $thisObj['says'];
+        $newObj->who = $thisObj['who'];
+        $newObj->date_time = $thisObj['date_time'];
+
+        if($chatHistory[$i]['privateMessage'] !== "public")
+        {
+            $newObj->privateMessage = $thisObj['privateMessage'];
+        }
+        // $jsonObjArr[] =$newObj;
+    }
+    $jsonObjArr[] =$newObj;
+}
+echo(json_encode($jsonObjArr));
+// echo($chatUser);
+
+
+
+/*
 // $userPos = strpos($chatHistory, $chatUser->user);
 // echo($userPos);
 $chatHistoryLines = explode(PHP_EOL, $chatHistory);
@@ -38,8 +93,8 @@ for($i = $chatUser->lineNum; $i < count($chatHistoryLines); $i++)
     }
 
 }
-
-echo(json_encode($jsonObjArr));
+*/
+// echo(json_encode($chatHistory));
 
 
 
